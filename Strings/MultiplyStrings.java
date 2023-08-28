@@ -27,7 +27,6 @@ Sample Output 2:
 50
  */
 
-import java.util.*;
 public class MultiplyStrings {
     public static String multiplyStrings(String a, String b) {
 

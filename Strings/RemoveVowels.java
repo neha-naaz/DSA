@@ -19,7 +19,9 @@ string ‘Mobile’.
 (ii) The output ‘CdngNnjs’ is obtained after removing vowels ‘o’, ‘i’, ‘i’, and ‘a’ from second, fourth, eighth, and
 eleventh position respectively of given string ‘CodingNinjas’.
  */
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 public class RemoveVowels {
     public static String removeVowels(String str) {
         // Write your code here.

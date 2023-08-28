@@ -29,7 +29,6 @@ In the second test case, as 'D' is greater than the length of the string, so rot
 
  */
 
-import java.util.*;
 public class LeftRightRotationOfStr {
     public static String leftRotate(String str, int d) {
         // Write you code here.

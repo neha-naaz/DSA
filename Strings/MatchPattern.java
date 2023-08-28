@@ -58,7 +58,10 @@ Sample Output 3:
 A
  */
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 public class MatchPattern {
     public static boolean isMatch(String s1, String s2){
         // If the number of chars aren't same

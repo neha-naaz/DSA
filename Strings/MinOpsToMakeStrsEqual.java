@@ -7,7 +7,8 @@ number of pre-processing moves on the string A required to make it equal to stri
 3. Choose any index i (0 <= i < n) and swap characters b[i]  and b[n-i-1] .
 In one preprocess move, you can replace a character in A with any other character of the English alphabet.
  */
-import java.util.*;
+
+import java.util.HashMap;
 public class MinOpsToMakeStrsEqual {
     public static int minimumOperations(String a, String b) {
 

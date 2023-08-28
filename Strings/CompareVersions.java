@@ -30,7 +30,6 @@ Sample Output 2:
 0
  */
 
-import java.util.*;
 public class CompareVersions {
     public static int compareVersions(String a, String b)
     {

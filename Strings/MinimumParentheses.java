@@ -28,7 +28,9 @@ Test Case 2:
 In the given "pattern" = "((" so we need two extra closing parentheses ‘)’ to make string "pattern" valid.
 So return 2 number of minimum extra parentheses to make string "pattern" valid.
  */
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.List;
 public class MinimumParentheses {
     public static int minimumParentheses(String pattern) {
         // Write your code here.
