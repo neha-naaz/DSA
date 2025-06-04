@@ -36,16 +36,16 @@ Constraints:
  * }
  */
 
-class ValidBST {
+class Solution {
     public boolean isValidBST(TreeNode root) {
         if(root == null) {
-            true;
+            return true;
         }
 
         return dfs(root, Long.MIN_VALUE, Long.MAX_VALUE);
     }
 
-    private dfs(TreeNode root, int left, int right) {
+    private boolean dfs(TreeNode root, long left, long right) {
         if(root == null) {
             return true;
         }
