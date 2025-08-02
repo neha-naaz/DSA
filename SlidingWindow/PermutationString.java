@@ -71,6 +71,35 @@ public class PermutationString {
 
         return matches==26;
     }
+
+    // Time complexity: O(n)
+    public boolean checkInclusion1(String s1, String s2) {
+        int m = s1.length(), n = s2.length();
+        if (m > n) return false;
+
+        int[] f1 = new int[26];
+        int[] f2 = new int[26];
+        for(int i=0;i<m;i++) {
+            f1[s1.charAt(i)-'a']++;
+            f2[s2.charAt(i)-'a']++;
+        }
+
+        int l = 0, r = m-1;
+        while (r < n) {
+            int len = 0;
+            if(r > m-1) f2[s2.charAt(r)-'a']++;
+            for (int i=0;i<26;i++) {
+                if (f1[i] == f2[i] && f1[i] != 0) {
+                    len += f1[i];
+                }
+            }
+            if (len == s1.length()) return true;
+            f2[s2.charAt(l)-'a']--;
+            l++;
+            r++;
+        }
+        return false;
+    }
 }
 
 class ExecutePermutationString{
