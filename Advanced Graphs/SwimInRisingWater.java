@@ -172,4 +172,75 @@ class SwimInRisingWater {
         }
         return n*n;
     }
+
+    // Kruskal's Approach
+    // Time Complexity: O(n^2 logn) Space Complexity: O(n^2)
+    public int swimInWater4(int[][] grid) {
+        int N = grid.length;
+        DSU dsu = new DSU(N * N);
+        // each cell is considered as vertex
+        List<int[]> positions = new ArrayList<>();
+        for (int r = 0; r < N; r++) {
+            for (int c = 0; c < N; c++) {
+                positions.add(new int[]{grid[r][c], r, c});
+            }
+        }
+        // sort all the positions based on value(weight)
+        positions.sort(Comparator.comparingInt(a -> a[0]));
+        // all neighbors considered edges
+        int[][] directions = {
+            {0, 1}, {1, 0}, {0, -1}, {-1, 0}
+        };
+        
+        for (int[] pos : positions) {
+            int t = pos[0], r = pos[1], c = pos[2];
+            for (int[] dir : directions) {
+                int nr = r + dir[0], nc = c + dir[1];
+                if (nr >= 0 && nr < N && nc >= 0 &&
+                    nc < N && grid[nr][nc] <= t) {
+                    dsu.union(r * N + c, nr * N + nc);
+                }
+            }
+            if (dsu.connected(0, N * N - 1)) return t;
+        }
+        // dummy statement
+        return N * N;
+    }
+}
+
+class DSU {
+    int[] parent;
+    int[] rank;
+    public DSU(int n) {
+        parent = new int[n+1];
+        rank = new int[n+1];
+        for(int i=0;i<=n;i++) {
+            parent[i] = i;
+        }
+        Arrays.fill(rank, 1);
+    }
+
+    public int find(int x) {
+        if (parent[x] != x) {
+            parent[x] = find(parent[x]);
+        }
+        return parent[x];
+    }
+
+    public boolean union(int u, int v) {
+        int pu = find(u), pv = find(v);
+        if (pu == pv) return false;
+        if (rank[pu] < rank[pv]) {
+            int temp = rank[pu];
+            rank[pu] = rank[pv];
+            rank[pv] = temp;
+        }
+        rank[pu] += rank[pv];
+        parent[pv] = pu;
+        return true;
+    }
+
+    public boolean connected(int u, int v) {
+        return find(u) == find(v);
+    }
 }
