@@ -101,5 +101,46 @@ class SwimInRisingWater {
                dfsOptimized(grid, visit, i, j-1, t);
     }
 
+    // Approach: instead of looping from minH to maxH, do a binary search 
+    // Time Complexity: O(n^2 logn) Space Complexity: O(n^2)
+    public int swimInWater2(int[][] grid) {
+        int n = grid.length;
+        boolean[][] visit = new boolean[n][n];
+        int minH = grid[0][0], maxH = grid[0][0];
+        for (int row = 0; row < n; row++) {
+            for (int col = 0; col < n; col++) {
+                maxH = Math.max(maxH, grid[row][col]);
+                minH = Math.min(minH, grid[row][col]);
+            }
+        }
+        int l = minH, r = maxH;
+        while (l < r) {
+            int m = (l+r)/2;
+            if (dfsOptimized1(grid, visit, 0, 0, m)) {
+                r = m;
+            } else {
+                l = m+1;
+            }
+            for(int i=0;i<n;i++) {
+                Arrays.fill(visit[i], false);
+            }
+        }
+        return r;
+    }
+
+    private boolean dfsOptimized1(int[][] grid, boolean[][] visit, int i, int j, int t) {
+        if (i<0 || j<0 || i>grid.length-1 || j>grid.length-1 || visit[i][j] || grid[i][j] > t) {
+            return false;
+        }
+        if (i==grid.length-1 && j==grid.length-1) {
+            return true;
+        }
+        visit[i][j] = true;
+        return dfsOptimized1(grid, visit, i+1, j, t) ||
+               dfsOptimized1(grid, visit, i-1, j, t) ||
+               dfsOptimized1(grid, visit, i, j+1, t) ||
+               dfsOptimized1(grid, visit, i, j-1, t);
+    }
+
     
 }
