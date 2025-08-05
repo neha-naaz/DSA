@@ -142,5 +142,34 @@ class SwimInRisingWater {
                dfsOptimized1(grid, visit, i, j-1, t);
     }
 
-    
+    // Dijkstra's algorithm
+    //Time Complexity: O(N^2 * log N) – Each of the N^2 cells is pushed into the min-heap at most once.
+    // Space Complexity: O(N^2) – for the visited array and the heap.
+    public int swimInWater3(int[][] grid) {
+        PriorityQueue<int[]> minHeap = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        int n = grid.length;
+        boolean[][] visit = new boolean[n][n];
+        int[][] directions = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+        minHeap.offer(new int[]{grid[0][0], 0, 0});
+        visit[0][0] = true;
+
+        while(!minHeap.isEmpty()) {
+            int[] curr = minHeap.poll();
+            int t = curr[0], i=curr[1], j=curr[2];
+            if (i == n-1 && j==n-1) {
+                return t;
+            }
+
+            for(int[] dir: directions) {
+                int r = dir[0]+i;
+                int c = dir[1]+j;
+                if (r>=0 && c>=0 && r<n && c<n && !visit[r][c]) {
+                    visit[r][c] = true;
+                    minHeap.offer(new int[]{Math.max(grid[r][c], t), r, c});
+                }
+            }
+        }
+        return n*n;
+    }
 }
