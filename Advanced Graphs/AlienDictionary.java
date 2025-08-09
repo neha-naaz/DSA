@@ -82,3 +82,76 @@ class AlienDictionary {
         return res.toString();
     }
 }
+
+class AlienDictionary1 {
+    Map<Character, Set<Character>> adj;
+    int[] vis;
+    List<Character> result;
+    /*The DFS here does two jobs:
+    Detects cycles (invalid order).
+    Produces topological order using post-order traversal.
+    Returning true means: “Stop — invalid ordering detected.”
+    Returning false means: “This path is fine — keep going.”
+    Post-order + reverse = correct alien alphabet order.*/
+    // Time Complexity: O(N + V + E)
+    // Space Complexity: O(V + E)
+    public String foreignDictionary(String[] words) {
+        // initialize adj list with all the chars in every word
+        adj = new HashMap<>();
+        for (String word : words) {
+            for (char c : word.toCharArray()) {
+                adj.putIfAbsent(c, new HashSet<>());
+            }
+        }   
+        // build adjaceny list
+        // nodes are lowercase english alphabets
+        // compare adj strings build an edge for the order
+        for(int i=1;i<words.length;i++) {
+            String a = words[i-1], b = words[i];
+            int minLen = Math.min(a.length(), b.length());
+            // invalid order scenario
+            if (a.length() > b.length() && a.substring(0, minLen).equals(b.substring(0, minLen))) {
+                return "";
+            }
+            for (int j=0;j<minLen;j++) {
+                if (a.charAt(j) != b.charAt(j)) {
+                    if (!adj.get(a.charAt(j)).contains(b.charAt(j))) {
+                        adj.get(a.charAt(j)).add(b.charAt(j));
+                    }
+                    break;
+                }
+            }
+        }
+
+        result = new ArrayList<>();
+        vis = new int[26];
+        for (char ch : adj.keySet()) {
+            if (vis[ch - 'a'] == 0) { // unvisited
+                if (dfs(ch)) return ""; // cycle → invalid ordering
+            }
+        }
+
+        Collections.reverse(result); // because we added in post-order
+        StringBuilder sb = new StringBuilder();
+        for (char c : result) {
+            sb.append(c);
+        }
+        return sb.toString();
+    }
+
+    private boolean dfs(char ch) {
+        if (vis[ch - 'a'] == 1) return true;  // Found a cycle → invalid
+        if (vis[ch - 'a'] == 2) return false; // Already processed → skip
+
+        vis[ch - 'a'] = 1; // mark as visiting
+
+        for (char nxt : adj.get(ch)) {
+            if (dfs(nxt)) return true; // if cycle in next node → propagate true
+        }
+
+        vis[ch - 'a'] = 2; // mark as processed
+        result.add(ch);    // post-order add for topological sorting
+        return false;       // no cycle found
+    }
+}
+
