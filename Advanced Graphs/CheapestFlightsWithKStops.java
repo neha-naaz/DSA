@@ -59,3 +59,55 @@ class NaiveDFS {
         }
     }
 }
+
+class BFSDijkstra {
+  // Time Complexity: O(m*k) m = number of flights
+  // Space Complexity: O(n+m)
+    public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
+        // Build adjacency list: city -> list of (nextCity, cost)
+        Map<Integer, List<int[]>> adj = new HashMap<>();
+        for (int[] edge : flights) {
+            adj.computeIfAbsent(edge[0], x -> new ArrayList<>()).add(new int[]{edge[1], edge[2]});
+        }
+
+        // BFS queue: {city, totalCost, stopsUsed}
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{src, 0, 0});
+
+        // Track best cost to reach each city with a certain number of stops
+        int[] dist = new int[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+
+        int minPrice = Integer.MAX_VALUE;
+
+        while (!q.isEmpty()) {
+            int[] cur = q.poll();
+            int city = cur[0], cost = cur[1], stops = cur[2];
+
+            // If we reached destination, update minPrice
+            if (city == dst) {
+                minPrice = Math.min(minPrice, cost);
+            }
+
+            // If stops exceed limit, skip
+            if (stops > k) continue;
+
+            // Explore neighbors
+            if (adj.containsKey(city)) {
+                for (int[] nei : adj.get(city)) {
+                    int nextCity = nei[0], nextCost = cost + nei[1];
+
+                    // Only push if it's cheaper than what we had before
+                    if (nextCost < dist[nextCity]) {
+                        dist[nextCity] = nextCost;
+                        q.offer(new int[]{nextCity, nextCost, stops + 1});
+                    }
+                }
+            }
+        }
+
+        return minPrice == Integer.MAX_VALUE ? -1 : minPrice;
+    }
+}
+
