@@ -41,6 +41,19 @@ class Solution {
     }
     public int minCostClimbingStairs1D_DP(int[] cost) {
         int[] dp = new int[cost.length+1];
+        Arrays.fill(dp, -1);
         memoized(dp, 0, cost);
+    }
+    private int memoized(int i, int[] dp, int[] cost) {
+        if (i >= cost.length) return 0;
+        if (dp[i] != -1) return dp[i];
+        dp[i] = cost[i] + Math.min(dfs(i+1, dp, cost), dfs(i+2, dp, cost));
+        return dp[i];
+    }
+    private int oneD_DP_SpaceLess(int[] cost) {
+        for(int i=cost.length-3;i>=0;i--) {
+            cost[i] = Math.min(cost[i+1]+cost[i], cost[i+2]+cost[i]);
+        }
+        return Math.min(cost[0], cost[1]);
     }
 }
