@@ -148,4 +148,40 @@ class WordDictionary1 {
     }
 }
 
-
+class WordDictionary2 {
+  // without a trie node class. here no root. self referential. this is root
+    final static int N = 26;
+    WordDictionary[] children;
+    boolean isEnd;
+    
+    public WordDictionary() {
+        this.children = new WordDictionary[N];
+    }
+    
+    public void addWord(String word) {
+        WordDictionary root = this;
+        for(char ch: word.toCharArray()){
+            int index = ch - 'a';
+            if(root.children[index] == null) root.children[index] = new WordDictionary();
+            root = root.children[index];
+        }
+        root.isEnd = true;
+        return;
+    }
+    
+    private boolean searchFor(WordDictionary root, char[] chArray, int index){
+        if(index == chArray.length) return root.isEnd;
+            
+        if(chArray[index] == '.'){
+            for(WordDictionary wd: root.children) 
+                if(wd != null && searchFor(wd, chArray, index+1)) return true;
+        } else if(root.children[chArray[index] - 'a'] != null) 
+            return searchFor(root.children[chArray[index] - 'a'], chArray, index+1);
+        
+        return false; //default
+    }
+    
+    public boolean search(String word) {
+        return searchFor(this, word.toCharArray(), 0);
+    }
+}
