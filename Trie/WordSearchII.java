@@ -109,5 +109,43 @@ class TrieNode {
         this.ind = ind;
     }
 }
+class WordDictionary1 {
+    TrieNode root;
+    public WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    public void addWord(String word) {
+        TrieNode curr = root;
+        for (char ch: word.toCharArray()) {
+            if (curr.children[ch-'a'] == null) {
+                curr.children[ch-'a'] = new TrieNode();
+            }
+            curr = curr.children[ch-'a'];
+        }
+        curr.isEndOfWord = true;
+    }
+    
+    public boolean search(String word) {
+        TrieNode temp = root;
+        return dfs(word, 0, temp);
+    }
+
+    private boolean dfs(String word, int ind, TrieNode curr) {
+        if (ind >= word.length()) {
+            return curr.isEndOfWord;
+        }
+
+        if (word.charAt(ind) == '.') {
+            for (TrieNode child: curr.children) {
+                if (child != null && dfs(word, ind+1, child)) return true;
+            }
+            return false;
+        } else {
+            if (curr.children[word.charAt(ind)-'a'] == null) return false;
+            return dfs(word, ind+1, curr.children[word.charAt(ind)-'a']);
+        }
+    }
+}
 
 
