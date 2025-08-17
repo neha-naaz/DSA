@@ -44,4 +44,27 @@ class MaxAreaOfIsland {
         if(i<grid.length-1) dfs(grid, i+1, j, currArea);
         if(j<grid[0].length-1) dfs(grid, i, j+1, currArea);
     }
+
+    private int bfs(int[][] grid, int r, int c, int[][] dir)
+    {
+        int ans = 0;
+        Queue<int[]> q = new LinkedList<>();
+        q.offer(new int[]{r, c});
+        grid[r][c] = 0;
+        while(!q.isEmpty())
+        {
+            ++ans;
+            int[] curr = q.poll();
+            for(int[] d: dir)
+            {
+                int x = curr[0] + d[0];
+                int y = curr[1] + d[1];
+                
+                if(x < 0 || x > grid.length-1 || y < 0 || y > grid[0].length-1 || grid[x][y] == 0)continue;
+                grid[x][y] = 0;
+                q.offer(new int[]{x, y});
+            }
+        }
+        return ans;
+    }
 }
