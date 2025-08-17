@@ -49,4 +49,22 @@ class NumberOfIslands {
         if(i<grid.length-1) dfs(grid, i+1, j);
         if(j<grid[0].length-1) dfs(grid, i, j+1);
     }
+
+    private void bfs(int a, int b, char[][] grid) {
+        Queue<int[]> q = new LinkedList<>();
+        q.add(new int[]{a, b});
+        grid[a][b] = '.';
+        int[][] dir = {{0,1},{1,0},{-1,0},{0,-1}};
+        while (!q.isEmpty()) {
+            int[] ind = q.poll();
+            for (int[] d: dir) {
+                int i = ind[0]+d[0];
+                int j = ind[1]+d[1];
+                if (i < 0 || i >= grid.length || j <0 || j >= grid[0].length 
+                || grid[i][j] == '.' || grid[i][j] == '0') continue;
+                q.add(new int[]{i,j});
+                grid[i][j] = '.';
+            }
+        }
+    }
 }
