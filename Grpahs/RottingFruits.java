@@ -65,4 +65,42 @@ class RottingFruits {
         }
         return freshFruits == 0 ? resultTime : -1;
     }
+
+    // t: O(m*n)^2 s: O(1)
+    public int orangesRottingSpaceOptimized(int[][] grid) {
+        int fresh = 0, time = 0;
+        int r = grid.length, c = grid[0].length;
+        for (int i=0;i<r;i++) {
+            for(int j=0;j<c;j++) {
+                if (grid[i][j] == 1) fresh++;
+            }
+        }
+        int[][] dir = {{0,1},{1,0},{0,-1},{-1,0}};
+        while (fresh > 0) {
+            boolean noRotten = true;
+            for (int i=0;i<r;i++) {
+                for(int j=0;j<c;j++) {
+                    if (grid[i][j] == 2) {
+                        for(int[] d: dir) {
+                            int x = d[0]+i;
+                            int y = d[1]+j;
+                            if (x < 0 || y < 0 || x >= r || y >= c || grid[x][y] != 1) 
+                                continue;
+                            grid[x][y] = 3;
+                            noRotten = false;
+                            fresh--;
+                        }
+                    }
+                }
+            }
+            if (noRotten) return -1;
+            for (int i=0;i<r;i++) {
+                for(int j=0;j<c;j++) {
+                    if (grid[i][j] == 3) grid[i][j] = 2;
+                }
+            }
+            time++;
+        }
+        return time;
+    }
 }
