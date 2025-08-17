@@ -77,4 +77,24 @@ class CloneGraph {
 
         return newNode;
     }
+
+    public Node cloneGraphBfs(Node node) {
+        if (node == null) return null;
+        Map<Node, Node> map = new HashMap<>();
+        Queue<Node> q = new ArrayDeque<>();
+        q.add(node);
+        Node newNode = new Node(node.val);
+        map.put(node, newNode);
+        while(!q.isEmpty()) {
+            Node curr = q.poll();
+            for(Node nei: curr.neighbors) {
+                if (!map.containsKey(nei)) {
+                    map.put(nei, new Node(nei.val));
+                    q.add(nei);
+                }
+                map.get(curr).neighbors.add(map.get(nei));
+            }
+        }
+        return map.get(node);
+    }
 }
