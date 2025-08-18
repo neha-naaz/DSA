@@ -83,3 +83,40 @@ class CourseSchedule {
         return finish == numCourses;
     }
 }
+
+class DFSCycleDetection {
+    List<List<Integer>> adj;
+    Set<Integer> visited;   // fully processed nodes
+
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        adj = new ArrayList<>();
+        visited = new HashSet<>();
+        
+        for (int i = 0; i < numCourses; i++) {
+            adj.add(new ArrayList<>());
+        }
+        for (int[] edge : prerequisites) {
+            adj.get(edge[0]).add(edge[1]);
+        }
+        
+        Set<Integer> recStack = new HashSet<>();
+        for (int i = 0; i < numCourses; i++) {
+            if (!noCycle(i, recStack)) return false;
+        }
+        return true;
+    }
+
+    private boolean noCycle(int v, Set<Integer> recStack) {
+        if (recStack.contains(v)) return false;  // cycle detected
+        if (visited.contains(v)) return true;    // already processed, no cycle
+        
+        recStack.add(v);
+        for (int e : adj.get(v)) {
+            if (!dfs(e, recStack)) return false;
+        }
+        recStack.remove(v);
+        visited.add(v);
+        return true;
+    }
+}
+
