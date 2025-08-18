@@ -54,4 +54,32 @@ class CourseSchedule {
         state[node] = 2; // done visiting
         return false;
     }
+
+    public boolean canFinishTopologicalSort(int numCourses, int[][] prerequisites) {
+        // adjacency list
+        List<List<Integer>> adj = new ArrayList<>();
+        int[] indegree = new int[numCourses];
+        for (int i=0;i<numCourses;i++)adj.add(new ArrayList<>());
+        for(int[] edge: prerequisites) {
+            indegree[edge[1]]++;
+            adj.get(edge[0]).add(edge[1]);
+        }
+        Queue<Integer> q = new LinkedList<>();
+        for (int i=0;i<numCourses;i++) {
+            if (indegree[i] == 0) {
+                q.offer(i);
+            }
+        }
+        int finish = 0;
+        while(!q.isEmpty()) {
+            int curr = q.poll();
+            finish++;
+            for (int nei: adj.get(curr)) {
+                indegree[nei]--;
+                // next course to be taken
+                if (indegree[nei] == 0) q.add(nei);
+            }
+        }
+        return finish == numCourses;
+    }
 }
