@@ -54,7 +54,31 @@ class graphValidTree {
                 return false;
             }
         }
-
         return true;
+    }
+
+    public boolean validTreeBFS(int n, int[][] edges) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i=0;i<n;i++) {
+            graph.add(new ArrayList<>());
+        }
+        for (int[] edge: edges) {
+            graph.get(edge[0]).add(edge[1]);
+             graph.get(edge[1]).add(edge[0]);
+        }
+        Queue<int[]> q = new ArrayDeque<>();
+        Set<Integer> set = new HashSet<>();
+        q.offer(new int[]{0, -1});
+        set.add(0);
+        while (!q.isEmpty()) {
+            int[] curr = q.poll();
+            for (int child: graph.get(curr[0])) {
+                if (child == curr[1]) continue;
+                if (set.contains(child)) return false;
+                set.add(child);
+                q.offer(new int[]{child, curr[0]});
+            }
+        }
+        return set.size() == n;
     }
 }
