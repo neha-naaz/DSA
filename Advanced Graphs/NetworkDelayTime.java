@@ -61,3 +61,40 @@ class NetworkDelayTime {
         return t;
     }
 }
+
+
+class Solution {
+    int INF = Integer.MAX_VALUE;
+    public int networkDelayTime(int[][] times, int n, int k) {
+        List<List<int[]>> adj = new ArrayList<>();
+        for(int i=0;i<=n;i++)adj.add(new ArrayList<>());
+        for(int[] edge: times) {
+            adj.get(edge[0]).add(new int[]{edge[1], edge[2]});
+        }
+        int[] dist = new int[n+1];
+        Arrays.fill(dist, INF);
+        PriorityQueue<int[]> q = new PriorityQueue<>((a,b) -> a[1]-b[1]);
+        dist[k] = 0;
+        q.offer(new int[]{k,0});
+        while(!q.isEmpty()) {
+            int[] curr = q.poll();
+            int u = curr[0], d = curr[1];
+
+            if (dist[u] < d) continue;
+
+            for (int[] nei: adj.get(u)) {
+                int v = nei[0], w = nei[1];
+                if (dist[u] != INF && dist[u]+w < dist[v]){
+                    dist[v] = dist[u]+w;
+                    q.offer(new int[]{v, dist[v]});
+                }
+            }
+        }
+        int result = -1;
+        for(int i=1;i<=n;i++) {
+            if (dist[i] == INF) return -1;
+            result = Math.max(result, dist[i]);
+        }
+        return result;
+    }
+}
